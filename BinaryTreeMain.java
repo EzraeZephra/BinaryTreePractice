@@ -7,6 +7,10 @@ public class BinaryTreeMain {
         tree.add(120);
         tree.add(111);
         tree.add(112);
-        System.out.println();
+        tree.add(250);
+        tree.add(20);
+        tree.add(21);
+        tree.add(19);
+        System.out.println(tree.contains(tree.getRoot(), 120));
     }
 }

@@ -27,4 +27,26 @@ public class BinaryTree<T> {
             }
         }
     }
+
+    public boolean contains(TreeNode<T> subRoot, T data) {
+        if (root == null) {
+            return false;
+        }
+        else if (subRoot.getData() == data) {
+            return true;
+        }
+        else {
+            if ((int)data > (int)subRoot.getData()) {
+                subRoot = subRoot.getRight();
+            }
+            else {
+                subRoot = subRoot.getLeft();
+            }
+            return contains(subRoot, data);
+        }
+    }
+
+    public TreeNode<T> getRoot() {
+        return root;
+    }
 }
