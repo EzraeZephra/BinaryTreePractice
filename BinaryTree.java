@@ -9,22 +9,21 @@ public class BinaryTree<T> {
         else {
             TreeNode<T> newNode = new TreeNode<>(data);
             TreeNode <T> tempNode = root;
-            while (tempNode.getRight() != null && tempNode.getLeft() != null) {
+            while (true) {
                 if (((int)data >= (int)tempNode.getData()) && (tempNode.getRight() != null)) {
                     tempNode = tempNode.getRight();
                 }
-                else {
-                    if (tempNode.getLeft() != null) {
-                        tempNode = tempNode.getLeft();
-                    }
+                else if ((int)data < (int)tempNode.getData() && tempNode.getLeft() != null) {
+                    tempNode = tempNode.getLeft();
                 }
-            }
-
-            if ((int)data >= (int)tempNode.getData()) {
-                tempNode.setRight(newNode);
-            }
-            else {
-                tempNode.setLeft(newNode);
+                if (tempNode.getLeft() == null && (int)data < (int)tempNode.getData()) {
+                    tempNode.setLeft(newNode);
+                    break;
+                }
+                if (tempNode.getRight() == null && (int)data >= (int)tempNode.getData()) {
+                    tempNode.setRight(newNode);
+                    break;
+                }
             }
         }
     }
