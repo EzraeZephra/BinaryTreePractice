@@ -1,4 +1,4 @@
-public class BinaryTree<T> {
+public class BinaryTree<T extends Comparable<T>> {
     private TreeNode<T> root;
 
     public void add(T data) {
@@ -10,17 +10,17 @@ public class BinaryTree<T> {
             TreeNode<T> newNode = new TreeNode<>(data);
             TreeNode <T> tempNode = root;
             while (true) {
-                if (((int)data >= (int)tempNode.getData()) && (tempNode.getRight() != null)) {
+                if ((data.compareTo(tempNode.getData()) >= 0) && (tempNode.getRight() != null)) {
                     tempNode = tempNode.getRight();
                 }
-                else if ((int)data < (int)tempNode.getData() && tempNode.getLeft() != null) {
+                else if ((data.compareTo(tempNode.getData()) < 0) && tempNode.getLeft() != null) {
                     tempNode = tempNode.getLeft();
                 }
-                if (tempNode.getLeft() == null && (int)data < (int)tempNode.getData()) {
+                if (tempNode.getLeft() == null && (data.compareTo(tempNode.getData()) < 0)) {
                     tempNode.setLeft(newNode);
                     break;
                 }
-                if (tempNode.getRight() == null && (int)data >= (int)tempNode.getData()) {
+                if (tempNode.getRight() == null && (data.compareTo(tempNode.getData()) >= 0)) {
                     tempNode.setRight(newNode);
                     break;
                 }
@@ -32,11 +32,11 @@ public class BinaryTree<T> {
         if (root == null) {
             return false;
         }
-        else if (subRoot.getData() == data) {
+        else if (data.compareTo(subRoot.getData()) == 0) {
             return true;
         }
         else {
-            if ((int)data > (int)subRoot.getData()) {
+            if (data.compareTo(subRoot.getData()) >= 0) {
                 subRoot = subRoot.getRight();
             }
             else {
