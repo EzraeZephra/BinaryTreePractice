@@ -95,4 +95,33 @@ public class BinaryTree<T extends Comparable<T>> {
             printRecursion(root, tempList);
         }
     }
+
+    public int size() {
+        ArrayList<TreeNode<T>> marked = new ArrayList<TreeNode<T>>();
+        return sizeRecursion(root, marked, 0);
+    }
+
+    public int sizeRecursion(TreeNode<T> node, ArrayList<TreeNode<T>> marked, int counter) {
+        ArrayList<TreeNode<T>> tempList = marked;
+        int num = counter;
+        if (node.getLeft() != null && (isMarked(node.getLeft(), marked) == false)) {
+            return sizeRecursion(node.getLeft(), tempList, num);
+        }
+        else if (node.getRight() != null) {
+            if (isMarked(node, marked) == false) {
+                num++;
+            }
+            marked.add(node);
+            return sizeRecursion(node.getRight(), tempList, num);
+        }
+        else if (node != getMax()){
+            marked.add(node);
+            num++;
+            return sizeRecursion(root, tempList, num);
+        }
+        else {
+            num++;
+            return num;
+        }
+    }
 }

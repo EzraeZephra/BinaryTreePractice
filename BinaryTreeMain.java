@@ -15,6 +15,7 @@ public class BinaryTreeMain {
         tree.add(245);
         tree.add(256);
         tree.add(254);
+        System.out.println(tree.size());
         tree.printInOrder();
     }
 }
