@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class BinaryTree<T extends Comparable<T>> {
     private TreeNode<T> root;
 
@@ -28,7 +30,11 @@ public class BinaryTree<T extends Comparable<T>> {
         }
     }
 
-    public boolean contains(TreeNode<T> subRoot, T data) {
+    public boolean contains(T data) {
+        return containsRecursion(root, data);
+    }
+
+    public boolean containsRecursion(TreeNode<T> subRoot, T data) {
         if (root == null) {
             return false;
         }
@@ -42,11 +48,51 @@ public class BinaryTree<T extends Comparable<T>> {
             else {
                 subRoot = subRoot.getLeft();
             }
-            return contains(subRoot, data);
+            return containsRecursion(subRoot, data);
         }
     }
 
-    public TreeNode<T> getRoot() {
-        return root;
+    public boolean isMarked(TreeNode<T> node, ArrayList<TreeNode<T>> marked) {
+        for (int i = 0; i < marked.size(); i++) {
+            if (node == marked.get(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public TreeNode<T> getMax() {
+        TreeNode<T> tempNode = root;
+        while (tempNode.getRight() != null) {
+            tempNode = tempNode.getRight();
+        }
+        return tempNode;
+    }
+
+    public void printInOrder() {
+        ArrayList<TreeNode<T>> marked = new ArrayList<TreeNode<T>>();
+        printRecursion(root, marked);
+    }
+
+    public void printRecursion(TreeNode<T> node, ArrayList<TreeNode<T>> marked) {
+        ArrayList<TreeNode<T>> tempList = marked;
+        if (node.getLeft() != null && (isMarked(node.getLeft(), marked) == false)) {
+            printRecursion(node.getLeft(), tempList);
+        }
+        else if (node.getRight() != null) {
+            if (isMarked(node, marked) == false) {
+                System.out.print(node.getData() + ": ");
+            }
+            marked.add(node);
+            printRecursion(node.getRight(), tempList);
+        }
+        else if (node == getMax()) {
+            System.out.print(node.getData());
+        }
+        else {
+            marked.add(node);
+            System.out.print(node.getData() + ": ");
+            printRecursion(root, tempList);
+        }
     }
 }

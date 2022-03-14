@@ -11,6 +11,10 @@ public class BinaryTreeMain {
         tree.add(20);
         tree.add(21);
         tree.add(19);
-        System.out.println(tree.contains(tree.getRoot(), 120));
+        tree.add(251);
+        tree.add(245);
+        tree.add(256);
+        tree.add(254);
+        tree.printInOrder();
     }
 }
