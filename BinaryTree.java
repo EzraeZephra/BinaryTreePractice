@@ -146,4 +146,96 @@ public class BinaryTree<T extends Comparable<T>> {
             return num;
         }
     }
+
+    public void delete(T data) {
+        deleteRecursion(root, root, root, root, data);
+    }
+
+    public void deleteRecursion(TreeNode<T> node, TreeNode<T> pNode, TreeNode<T> pNode2, TreeNode<T> edge, T data) {
+        TreeNode<T> curNode = node;
+        TreeNode<T> prevNode = pNode;
+        TreeNode<T> prevNode2 = pNode2;
+        TreeNode<T> edgeNode = edge;
+        int children = 0;
+
+        if (data.compareTo(curNode.getData()) < 0) {
+            prevNode = curNode;
+            curNode = curNode.getLeft();
+            deleteRecursion(curNode, prevNode, curNode, curNode, data);
+        }
+        else if (data.compareTo(curNode.getData()) > 0) {
+            prevNode = curNode;
+            curNode = curNode.getRight();
+            deleteRecursion(curNode, prevNode, curNode, curNode, data);
+        }
+        else {
+            if (curNode.getLeft() != null) {
+                children++;
+            }
+            if (curNode.getRight() != null) {
+                children++;
+            }
+
+            if (children == 0) {
+                if (curNode.getData().compareTo(prevNode.getData()) < 0) {
+                    prevNode.setLeft(null);
+                }
+                else {
+                    prevNode.setRight(null);
+                }
+            }
+            else if (children == 1) {
+                if (curNode.getLeft() != null) {
+                    if (curNode.getLeft().getData().compareTo(prevNode.getData()) < 0) {
+                        prevNode.setLeft(node.getLeft());
+                        curNode = null;
+                    }
+                    else {
+                        prevNode.setRight(node.getLeft());
+                        curNode = null;
+                    }
+                }
+                else {
+                    if (curNode.getRight().getData().compareTo(prevNode.getData()) < 0) {
+                        prevNode.setLeft(node.getRight());
+                        curNode = null;
+                    }
+                    else {
+                        prevNode.setRight(node.getRight());
+                        curNode = null;
+                    }
+                }
+            }
+            else {
+                if (edgeNode == curNode) {
+                    edgeNode = edgeNode.getLeft();
+                    deleteRecursion(curNode, prevNode, prevNode2, edgeNode, data);
+                }
+                else if (edgeNode.getRight() != null) {
+                    prevNode2 = edgeNode;
+                    edgeNode = edgeNode.getRight();
+                    deleteRecursion(curNode, prevNode, prevNode2, edgeNode, data);
+                }
+                else {
+                    edgeNode.setRight(curNode.getRight());
+                    prevNode2.setRight(null);
+                    if (edgeNode.getData().compareTo(curNode.getLeft().getData()) != 0) {
+                        edgeNode.setLeft(curNode.getLeft());
+                    }
+                    if (data.compareTo(root.getData()) == 0){
+                        edgeNode.setLeft(root.getLeft());
+                        edgeNode.setRight(root.getRight());
+                        root = edgeNode;
+                    }
+                    else if (edgeNode.getData().compareTo(prevNode.getData()) > 0) {
+                        prevNode.setRight(edgeNode);
+                    }
+                    else {
+                        prevNode.setLeft(edgeNode);
+                    }
+                    curNode = null;
+                }
+            }
+        }
+    }
 }

@@ -2,7 +2,6 @@ public class TreeNode<T> {
     T data;
     private TreeNode<T> left;
     private TreeNode<T> right;
-    public Object getLeft;
 
     public TreeNode(T data) {
         this.data = data;
