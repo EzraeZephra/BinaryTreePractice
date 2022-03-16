@@ -52,9 +52,9 @@ public class BinaryTree<T extends Comparable<T>> {
         }
     }
 
-    public boolean isMarked(TreeNode<T> node, ArrayList<TreeNode<T>> marked) {
-        for (int i = 0; i < marked.size(); i++) {
-            if (node == marked.get(i)) {
+    public boolean inList(TreeNode<T> node, ArrayList<TreeNode<T>> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (node == list.get(i)) {
                 return true;
             }
         }
@@ -71,20 +71,31 @@ public class BinaryTree<T extends Comparable<T>> {
 
     public void printInOrder() {
         ArrayList<TreeNode<T>> marked = new ArrayList<TreeNode<T>>();
-        printRecursion(root, marked);
+        ArrayList<TreeNode<T>> exhausted = new ArrayList<TreeNode<T>>();
+        printRecursion(root, marked, exhausted);
     }
 
-    public void printRecursion(TreeNode<T> node, ArrayList<TreeNode<T>> marked) {
+    public void printRecursion(TreeNode<T> node, ArrayList<TreeNode<T>> marked, ArrayList<TreeNode<T>> exhausted) {
         ArrayList<TreeNode<T>> tempList = marked;
-        if (node.getLeft() != null && (isMarked(node.getLeft(), marked) == false)) {
-            printRecursion(node.getLeft(), tempList);
+        ArrayList<TreeNode<T>> exList = exhausted;
+        if (node.getLeft() != null && (inList(node.getLeft(), marked) == false)) {
+            printRecursion(node.getLeft(), tempList, exList);
         }
         else if (node.getRight() != null) {
-            if (isMarked(node, marked) == false) {
+            if (inList(node, exList) == false) {
+                exList.add(node);
                 System.out.print(node.getData() + ": ");
             }
-            marked.add(node);
-            printRecursion(node.getRight(), tempList);
+            if (inList(node.getRight(), exList) == true) {
+                marked.add(node);
+            }
+            if (inList(node.getRight(), tempList) == true) {
+                tempList.add(node);
+                printRecursion(root, tempList, exList);
+            }
+            else {
+                printRecursion(node.getRight(), tempList, exList); 
+            }
         }
         else if (node == getMax()) {
             System.out.print(node.getData());
@@ -92,32 +103,43 @@ public class BinaryTree<T extends Comparable<T>> {
         else {
             marked.add(node);
             System.out.print(node.getData() + ": ");
-            printRecursion(root, tempList);
+            printRecursion(root, tempList, exList);
         }
     }
 
     public int size() {
         ArrayList<TreeNode<T>> marked = new ArrayList<TreeNode<T>>();
-        return sizeRecursion(root, marked, 0);
+        ArrayList<TreeNode<T>> exhausted = new ArrayList<TreeNode<T>>();
+        return sizeRecursion(root, marked, exhausted, 0);
     }
 
-    public int sizeRecursion(TreeNode<T> node, ArrayList<TreeNode<T>> marked, int counter) {
+    public int sizeRecursion(TreeNode<T> node, ArrayList<TreeNode<T>> marked, ArrayList<TreeNode<T>> exhausted, int counter) {
         ArrayList<TreeNode<T>> tempList = marked;
+        ArrayList<TreeNode<T>> exList = exhausted;
         int num = counter;
-        if (node.getLeft() != null && (isMarked(node.getLeft(), marked) == false)) {
-            return sizeRecursion(node.getLeft(), tempList, num);
+        if (node.getLeft() != null && (inList(node.getLeft(), marked) == false)) {
+            return sizeRecursion(node.getLeft(), tempList, exList, num);
         }
         else if (node.getRight() != null) {
-            if (isMarked(node, marked) == false) {
+            if (inList(node, exList) == false) {
+                exList.add(node);
                 num++;
             }
-            marked.add(node);
-            return sizeRecursion(node.getRight(), tempList, num);
+            if (inList(node.getRight(), exList) == true) {
+                marked.add(node);
+            }
+            if (inList(node.getRight(), tempList) == true) {
+                tempList.add(node);
+                return sizeRecursion(root, tempList, exList, num);
+            }
+            else {
+                return sizeRecursion(node.getRight(), tempList, exList, num);
+            }
         }
-        else if (node != getMax()){
+        else if (node != getMax()) {
             marked.add(node);
             num++;
-            return sizeRecursion(root, tempList, num);
+            return sizeRecursion(root, tempList, exList, num);
         }
         else {
             num++;
